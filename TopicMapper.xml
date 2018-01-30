@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.TopicMapper">
+	<resultMap id="BaseResultMap" type="com.soft863.model.Topic">
+		<id column="TOPIC_ID" jdbcType="DECIMAL" property="topicId" />
+		<result column="TOPIC_TITLE" jdbcType="VARCHAR" property="topicTitle" />
+		<result column="TOPIC_CONTENT" jdbcType="VARCHAR" property="topicContent" />
+		<result column="TOPIC_TYPE" jdbcType="VARCHAR" property="topicType" />
+		<result column="TOPIC_TIME" jdbcType="TIMESTAMP" property="topicTime" />
+		<result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+		<result column="TOPIC_FID" jdbcType="DECIMAL" property="topicFid" />
+		<result column="TOPIC_STRING" jdbcType="VARCHAR" property="topicString" />
+		<result column="TOPIC_INT" jdbcType="DECIMAL" property="topicInt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		TOPIC_ID, TOPIC_TITLE, TOPIC_CONTENT, TOPIC_TYPE,
+		TOPIC_TIME, USER_ID,
+		TOPIC_FID,
+		TOPIC_STRING, TOPIC_INT
+	</sql>
+	
+	<sql id="header">
+		SELECT
+			b.*
+		FROM
+			(
+				SELECT
+					A.*, rownum rn
+				FROM
+					(
+	</sql>
+	
+	<sql id="footer">
+					) A
+			WHERE
+				rownum&lt;= ${param1 }* ${param2 }
+			) b
+		WHERE
+			rn >= (${param1 }- 1) * ${param2 }+ 1
+	</sql>
+
+	<select id="getTopicsCount" resultType="int">
+		SELECT COUNT(1) from
+		BBS_TOPIC
+	</select>
+
+	<select id="selectTopicsByPage" resultType="map">
+		<include refid="header"></include>
+		SELECT
+		t4.*, t5.user_loginname send_name
+		FROM
+			(
+				SELECT
+					b.topic_id,
+					b.topic_title,
+					b.topic_type,
+					b.topic_time,
+					b.user_id,
+					t2.reply_name,
+					t2.tc_time
+				FROM
+					bbs_topic b
+				LEFT JOIN (
+					SELECT
+						T .topic_id,
+						T .tc_time,
+						t1.user_loginname reply_name
+					FROM
+						(
+							SELECT
+								tc_id,
+								TOPIC_ID,
+								user_id,
+								tc_time,
+								RANK () OVER (
+									PARTITION BY TOPIC_id
+									ORDER BY
+										tc_time DESC
+								) mm
+							FROM
+								BBS_TOPICREPLY
+						) T
+					LEFT JOIN bbs_user t1 ON T .user_id = t1.user_id
+					WHERE
+						mm = 1
+				) t2 ON t2.topic_id = b.topic_id
+			) t4
+		LEFT JOIN bbs_user t5 ON t4.user_id = t5.user_id
+		<include refid="footer"></include>
+	</select>
+
+	
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Short"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from BBS_TOPIC
+		where TOPIC_ID = #{topicId,jdbcType=DECIMAL}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+		delete from
+		BBS_TOPIC
+		where TOPIC_ID = #{topicId,jdbcType=DECIMAL}
+	</delete>
+	<insert id="insert" parameterType="com.soft863.model.Topic">
+		insert into BBS_TOPIC
+		(TOPIC_ID, TOPIC_TITLE, TOPIC_CONTENT,
+		TOPIC_TYPE, TOPIC_TIME, USER_ID,
+		TOPIC_FID, TOPIC_STRING, TOPIC_INT
+		)
+		values
+		(#{topicId,jdbcType=DECIMAL}, #{topicTitle,jdbcType=VARCHAR},
+		#{topicContent,jdbcType=VARCHAR},
+		#{topicType,jdbcType=VARCHAR},
+		#{topicTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=DECIMAL},
+		#{topicFid,jdbcType=DECIMAL}, #{topicString,jdbcType=VARCHAR},
+		#{topicInt,jdbcType=DECIMAL}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.soft863.model.Topic">
+		insert into BBS_TOPIC
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="topicId != null">
+				TOPIC_ID,
+			</if>
+			<if test="topicTitle != null">
+				TOPIC_TITLE,
+			</if>
+			<if test="topicContent != null">
+				TOPIC_CONTENT,
+			</if>
+			<if test="topicType != null">
+				TOPIC_TYPE,
+			</if>
+			<if test="topicTime != null">
+				TOPIC_TIME,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+			<if test="topicFid != null">
+				TOPIC_FID,
+			</if>
+			<if test="topicString != null">
+				TOPIC_STRING,
+			</if>
+			<if test="topicInt != null">
+				TOPIC_INT,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="topicId != null">
+				#{topicId,jdbcType=DECIMAL},
+			</if>
+			<if test="topicTitle != null">
+				#{topicTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="topicContent != null">
+				#{topicContent,jdbcType=VARCHAR},
+			</if>
+			<if test="topicType != null">
+				#{topicType,jdbcType=VARCHAR},
+			</if>
+			<if test="topicTime != null">
+				#{topicTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=DECIMAL},
+			</if>
+			<if test="topicFid != null">
+				#{topicFid,jdbcType=DECIMAL},
+			</if>
+			<if test="topicString != null">
+				#{topicString,jdbcType=VARCHAR},
+			</if>
+			<if test="topicInt != null">
+				#{topicInt,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Topic">
+		update BBS_TOPIC
+		<set>
+			<if test="topicTitle != null">
+				TOPIC_TITLE = #{topicTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="topicContent != null">
+				TOPIC_CONTENT = #{topicContent,jdbcType=VARCHAR},
+			</if>
+			<if test="topicType != null">
+				TOPIC_TYPE = #{topicType,jdbcType=VARCHAR},
+			</if>
+			<if test="topicTime != null">
+				TOPIC_TIME = #{topicTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=DECIMAL},
+			</if>
+			<if test="topicFid != null">
+				TOPIC_FID = #{topicFid,jdbcType=DECIMAL},
+			</if>
+			<if test="topicString != null">
+				TOPIC_STRING = #{topicString,jdbcType=VARCHAR},
+			</if>
+			<if test="topicInt != null">
+				TOPIC_INT = #{topicInt,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where TOPIC_ID = #{topicId,jdbcType=DECIMAL}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soft863.model.Topic">
+		update BBS_TOPIC
+		set TOPIC_TITLE = #{topicTitle,jdbcType=VARCHAR},
+		TOPIC_CONTENT =
+		#{topicContent,jdbcType=VARCHAR},
+		TOPIC_TYPE =
+		#{topicType,jdbcType=VARCHAR},
+		TOPIC_TIME =
+		#{topicTime,jdbcType=TIMESTAMP},
+		USER_ID = #{userId,jdbcType=DECIMAL},
+		TOPIC_FID = #{topicFid,jdbcType=DECIMAL},
+		TOPIC_STRING =
+		#{topicString,jdbcType=VARCHAR},
+		TOPIC_INT =
+		#{topicInt,jdbcType=DECIMAL}
+		where TOPIC_ID =
+		#{topicId,jdbcType=DECIMAL}
+	</update>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- 启用注解支持 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<ref bean="stringHttpMessageConverter"/>
+			<ref bean="mappingJackson2HttpMessageConverter"/>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 处理静态资源文件 -->
+	<mvc:default-servlet-handler />
+	
+	<context:component-scan base-package="com.soft863" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- prefix value不能省略 '/'  -->
+		<property name="prefix" value="/WEB-INF/pages/" />		
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 解决中文乱码 -->
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=utf-8</value>
+				<value>text/plain;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 解决IE浏览器下载,避免IE执行AJAX时，返回JSON出现下载文件 -->
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=utf-8</value>
+				<value>application/json;charset=utf-8</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 文件上传解析器 , bean的ID值为multipartResolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"></property>
+		<property name="maxUploadSize" value="10485760"></property><!-- 10MB大小 -->
+	</bean>	
+	
+	
+	<!-- 配置拦截器 -->
+	<!-- <mvc:interceptors>
+		拦截所有的action请求
+		<bean class="com.soft863.interceptor.TimerInterceptor" />
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*"/>
+			<mvc:exclude-mapping path="/user/*"/>
+			<mvc:exclude-mapping path="/f/*"/>
+			<mvc:exclude-mapping path="/js/*"/>
+			<mvc:exclude-mapping path="/css/*"/>
+			<mvc:exclude-mapping path="/images/*"/>
+			<bean class="com.soft863.interceptor.SessionInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	 -->
+	
+	<!-- 配置异常解析器 -->
+	<!-- <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">error</prop>
+			</props>
+		</property>
+	</bean> -->
+	
+	<!-- 配置国际化处理器 , message_zh_CN.properties , message_en_US.properties -->
+	<bean id="messageSource"  class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="message"></property>
+		<property name="defaultEncoding" value="utf-8"></property>
+	</bean>
+	
+	<!-- 基于请求的国际化 -->
+	<!-- <mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
+	</mvc:interceptors> -->
+	
+	<!-- 基于session的配置 -->
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" /> -->
+</beans>

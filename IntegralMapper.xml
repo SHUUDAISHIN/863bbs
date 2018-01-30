@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.IntegralMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Integral">
+    <id column="INTEGRAL_ID" jdbcType="DECIMAL" property="integralId" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="INTEGRAL_NUM" jdbcType="DECIMAL" property="integralNum" />
+    <result column="INTEGRAL_TIME" jdbcType="TIMESTAMP" property="integralTime" />
+    <result column="INTEGRAL_SOURCE" jdbcType="VARCHAR" property="integralSource" />
+    <result column="INTEGRAL_STRING" jdbcType="VARCHAR" property="integralString" />
+    <result column="INTEGRAL_INT" jdbcType="DECIMAL" property="integralInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    INTEGRAL_ID, USER_ID, INTEGRAL_NUM, INTEGRAL_TIME, INTEGRAL_SOURCE, INTEGRAL_STRING, 
+    INTEGRAL_INT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_INTEGRAL
+    where INTEGRAL_ID = #{integralId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_INTEGRAL
+    where INTEGRAL_ID = #{integralId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Integral">
+    insert into BBS_INTEGRAL (INTEGRAL_ID, USER_ID, INTEGRAL_NUM, 
+      INTEGRAL_TIME, INTEGRAL_SOURCE, INTEGRAL_STRING, 
+      INTEGRAL_INT)
+    values (#{integralId,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, #{integralNum,jdbcType=DECIMAL}, 
+      #{integralTime,jdbcType=TIMESTAMP}, #{integralSource,jdbcType=VARCHAR}, #{integralString,jdbcType=VARCHAR}, 
+      #{integralInt,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Integral">
+    insert into BBS_INTEGRAL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="integralId != null">
+        INTEGRAL_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="integralNum != null">
+        INTEGRAL_NUM,
+      </if>
+      <if test="integralTime != null">
+        INTEGRAL_TIME,
+      </if>
+      <if test="integralSource != null">
+        INTEGRAL_SOURCE,
+      </if>
+      <if test="integralString != null">
+        INTEGRAL_STRING,
+      </if>
+      <if test="integralInt != null">
+        INTEGRAL_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="integralId != null">
+        #{integralId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="integralNum != null">
+        #{integralNum,jdbcType=DECIMAL},
+      </if>
+      <if test="integralTime != null">
+        #{integralTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="integralSource != null">
+        #{integralSource,jdbcType=VARCHAR},
+      </if>
+      <if test="integralString != null">
+        #{integralString,jdbcType=VARCHAR},
+      </if>
+      <if test="integralInt != null">
+        #{integralInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Integral">
+    update BBS_INTEGRAL
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="integralNum != null">
+        INTEGRAL_NUM = #{integralNum,jdbcType=DECIMAL},
+      </if>
+      <if test="integralTime != null">
+        INTEGRAL_TIME = #{integralTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="integralSource != null">
+        INTEGRAL_SOURCE = #{integralSource,jdbcType=VARCHAR},
+      </if>
+      <if test="integralString != null">
+        INTEGRAL_STRING = #{integralString,jdbcType=VARCHAR},
+      </if>
+      <if test="integralInt != null">
+        INTEGRAL_INT = #{integralInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where INTEGRAL_ID = #{integralId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Integral">
+    update BBS_INTEGRAL
+    set USER_ID = #{userId,jdbcType=DECIMAL},
+      INTEGRAL_NUM = #{integralNum,jdbcType=DECIMAL},
+      INTEGRAL_TIME = #{integralTime,jdbcType=TIMESTAMP},
+      INTEGRAL_SOURCE = #{integralSource,jdbcType=VARCHAR},
+      INTEGRAL_STRING = #{integralString,jdbcType=VARCHAR},
+      INTEGRAL_INT = #{integralInt,jdbcType=DECIMAL}
+    where INTEGRAL_ID = #{integralId,jdbcType=DECIMAL}
+  </update>
+</mapper>

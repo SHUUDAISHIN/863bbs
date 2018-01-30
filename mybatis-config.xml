@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration 
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>	
+
+	<!-- 解决mybatis返回map，数据库中字段为空问题 -->
+	<settings>
+		<setting name="callSettersOnNulls" value="true"/>
+	</settings>
+	
+	<!-- 配置别名 -->
+	<typeAliases>
+		<!-- 给entity中的实体设置别名 -->
+		<!-- <typeAlias type="com.soft863.entity.User" alias="user" /> -->
+		
+		<!-- 会把所有的entity下的实体类设置别名，别名为 类名首字母变小写 -->
+		<package name="com.soft863.model"/>
+	</typeAliases>
+	
+
+</configuration>

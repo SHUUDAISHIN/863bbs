@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.AttentionMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Attention">
+    <id column="ATT_ID" jdbcType="DECIMAL" property="attId" />
+    <result column="ATTG_ID" jdbcType="DECIMAL" property="attgId" />
+    <result column="ATTB_ID" jdbcType="DECIMAL" property="attbId" />
+    <result column="ATT_STRING" jdbcType="VARCHAR" property="attString" />
+    <result column="ATT_INT" jdbcType="DECIMAL" property="attInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ATT_ID, ATTG_ID, ATTB_ID, ATT_STRING, ATT_INT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_ATTENTION
+    where ATT_ID = #{attId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_ATTENTION
+    where ATT_ID = #{attId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Attention">
+    insert into BBS_ATTENTION (ATT_ID, ATTG_ID, ATTB_ID, 
+      ATT_STRING, ATT_INT)
+    values (#{attId,jdbcType=DECIMAL}, #{attgId,jdbcType=DECIMAL}, #{attbId,jdbcType=DECIMAL}, 
+      #{attString,jdbcType=VARCHAR}, #{attInt,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Attention">
+    insert into BBS_ATTENTION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="attId != null">
+        ATT_ID,
+      </if>
+      <if test="attgId != null">
+        ATTG_ID,
+      </if>
+      <if test="attbId != null">
+        ATTB_ID,
+      </if>
+      <if test="attString != null">
+        ATT_STRING,
+      </if>
+      <if test="attInt != null">
+        ATT_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="attId != null">
+        #{attId,jdbcType=DECIMAL},
+      </if>
+      <if test="attgId != null">
+        #{attgId,jdbcType=DECIMAL},
+      </if>
+      <if test="attbId != null">
+        #{attbId,jdbcType=DECIMAL},
+      </if>
+      <if test="attString != null">
+        #{attString,jdbcType=VARCHAR},
+      </if>
+      <if test="attInt != null">
+        #{attInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Attention">
+    update BBS_ATTENTION
+    <set>
+      <if test="attgId != null">
+        ATTG_ID = #{attgId,jdbcType=DECIMAL},
+      </if>
+      <if test="attbId != null">
+        ATTB_ID = #{attbId,jdbcType=DECIMAL},
+      </if>
+      <if test="attString != null">
+        ATT_STRING = #{attString,jdbcType=VARCHAR},
+      </if>
+      <if test="attInt != null">
+        ATT_INT = #{attInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ATT_ID = #{attId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Attention">
+    update BBS_ATTENTION
+    set ATTG_ID = #{attgId,jdbcType=DECIMAL},
+      ATTB_ID = #{attbId,jdbcType=DECIMAL},
+      ATT_STRING = #{attString,jdbcType=VARCHAR},
+      ATT_INT = #{attInt,jdbcType=DECIMAL}
+    where ATT_ID = #{attId,jdbcType=DECIMAL}
+  </update>
+</mapper>

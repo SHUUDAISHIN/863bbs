@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.FileMapper">
+	<resultMap id="BaseResultMap" type="com.soft863.model.File">
+		<id column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+		<result column="FILE_NAME" jdbcType="VARCHAR" property="fileName" />
+		<result column="FILE_TIME" jdbcType="TIMESTAMP" property="fileTime" />
+		<result column="FILE_TYPE" jdbcType="VARCHAR" property="fileType" />
+		<result column="FILE_CRUCIAL" jdbcType="VARCHAR" property="fileCrucial" />
+		<result column="FILE_INTEGRAL" jdbcType="DECIMAL" property="fileIntegral" />
+		<result column="FILE_DETAILED" jdbcType="VARCHAR" property="fileDetailed" />
+		<result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+		<result column="FILE_STRING" jdbcType="VARCHAR" property="fileString" />
+		<result column="FILE_INT" jdbcType="DECIMAL" property="fileInt" />
+		<result column="FILE_FILES" jdbcType="VARCHAR" property="fileFiles" />
+		<result column="FILE_URL" jdbcType="VARCHAR" property="fileUrl" />
+	</resultMap>
+	<!-- <resultMap type="com.soft863.model.File" id="FileResultMap"> <id column="FILE_ID" 
+		jdbcType="DECIMAL" property="fileId" /> <result column="FILE_NAME" jdbcType="VARCHAR" 
+		property="fileName" /> <result column="FILE_TIME" jdbcType="TIMESTAMP" property="fileTime" 
+		/> <result column="FILE_INTEGRAL" jdbcType="DECIMAL" property="fileIntegral" 
+		/> <result column="USER_LOGINNAME" jdbcType="VARCHAR" property="userName" 
+		/> </resultMap> -->
+	<sql id="Base_Column_List">
+		FILE_ID, FILE_NAME, FILE_TIME, FILE_TYPE, FILE_CRUCIAL, FILE_INTEGRAL,
+		FILE_DETAILED,
+		USER_ID, FILE_STRING, FILE_INT, FILE_FILES, FILE_URL
+	</sql>
+
+
+	<!-- 分页SQL语句 -->
+	<sql id="header">
+		SELECT
+			b.*
+		FROM
+			(
+				SELECT
+					A.*, rownum rn
+				FROM
+					(
+	</sql>
+	
+	<sql id="footer">
+					) A
+			WHERE
+				rownum&lt;= ${param1 }* ${param2 }
+			) b
+		WHERE
+			rn >= (${param1 }- 1) * ${param2 }+ 1
+	</sql>
+	
+	<select id="selectFilesByPage" resultType="map" >
+		<include refid="header"></include>
+		SELECT
+			T.FILE_ID,
+			T.FILE_NAME,
+			T.FILE_TIME,
+			T.FILE_INTEGRAL,
+			T.FILE_FILES,
+			T1.USER_LOGINNAME
+		FROM
+			BBS_FILE T
+		LEFT JOIN BBS_USER t1 ON T.USER_ID = T1.USER_ID
+		ORDER BY
+			T.file_id
+		<include refid="footer"></include>
+	</select>
+	
+	<!-- 取得记录的总数 -->
+	<select id="getFilesCount" resultType="int">
+		SELECT COUNT(FILE_ID) FROM BBS_FILE
+	</select>
+
+	<select id="selAllFiles" resultType="map">
+		SELECT t.file_id,t.FILE_NAME,t.FILE_TIME,t.FILE_INTEGRAL,T1.USER_LOGINNAME
+		from BBS_FILE t LEFT JOIN BBS_USER t1 on t.USER_ID=T1.USER_ID
+	</select>
+
+	
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Short"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from BBS_FILE
+		where FILE_ID = #{fileId,jdbcType=DECIMAL}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+		delete from BBS_FILE
+		where FILE_ID = #{fileId,jdbcType=DECIMAL}
+	</delete>
+	<insert id="insert" parameterType="com.soft863.model.File">
+		insert into BBS_FILE (FILE_ID, FILE_NAME, FILE_TIME,
+		FILE_TYPE, FILE_CRUCIAL, FILE_INTEGRAL,
+		FILE_DETAILED, USER_ID, FILE_STRING,
+		FILE_INT, FILE_FILES, FILE_URL
+		)
+		values (#{fileId,jdbcType=DECIMAL}, #{fileName,jdbcType=VARCHAR},
+		#{fileTime,jdbcType=TIMESTAMP},
+		#{fileType,jdbcType=VARCHAR}, #{fileCrucial,jdbcType=VARCHAR}, #{fileIntegral,jdbcType=DECIMAL},
+		#{fileDetailed,jdbcType=VARCHAR}, #{userId,jdbcType=DECIMAL},
+		#{fileString,jdbcType=VARCHAR},
+		#{fileInt,jdbcType=DECIMAL}, #{fileFiles,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.soft863.model.File">
+		insert into BBS_FILE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+				FILE_ID,
+			<if test="fileName != null">
+				FILE_NAME,
+			</if>
+			<if test="fileTime != null">
+				FILE_TIME,
+			</if>
+			<if test="fileType != null">
+				FILE_TYPE,
+			</if>
+			<if test="fileCrucial != null">
+				FILE_CRUCIAL,
+			</if>
+			<if test="fileIntegral != null">
+				FILE_INTEGRAL,
+			</if>
+			<if test="fileDetailed != null">
+				FILE_DETAILED,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+			<if test="fileString != null">
+				FILE_STRING,
+			</if>
+			<if test="fileInt != null">
+				FILE_INT,
+			</if>
+			<if test="fileFiles != null">
+				FILE_FILES,
+			</if>
+			<if test="fileUrl != null">
+				FILE_URL,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				SEQ_BBS_FILE.NEXTVAL,
+			<if test="fileName != null">
+				#{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileTime != null">
+				#{fileTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fileType != null">
+				#{fileType,jdbcType=VARCHAR},
+			</if>
+			<if test="fileCrucial != null">
+				#{fileCrucial,jdbcType=VARCHAR},
+			</if>
+			<if test="fileIntegral != null">
+				#{fileIntegral,jdbcType=DECIMAL},
+			</if>
+			<if test="fileDetailed != null">
+				#{fileDetailed,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=DECIMAL},
+			</if>
+			<if test="fileString != null">
+				#{fileString,jdbcType=VARCHAR},
+			</if>
+			<if test="fileInt != null">
+				#{fileInt,jdbcType=DECIMAL},
+			</if>
+			<if test="fileFiles != null">
+				#{fileFiles,jdbcType=VARCHAR},
+			</if>
+			<if test="fileUrl != null">
+				#{fileUrl,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.File">
+		update BBS_FILE
+		<set>
+			<if test="fileName != null">
+				FILE_NAME = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileTime != null">
+				FILE_TIME = #{fileTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fileType != null">
+				FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+			</if>
+			<if test="fileCrucial != null">
+				FILE_CRUCIAL = #{fileCrucial,jdbcType=VARCHAR},
+			</if>
+			<if test="fileIntegral != null">
+				FILE_INTEGRAL = #{fileIntegral,jdbcType=DECIMAL},
+			</if>
+			<if test="fileDetailed != null">
+				FILE_DETAILED = #{fileDetailed,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=DECIMAL},
+			</if>
+			<if test="fileString != null">
+				FILE_STRING = #{fileString,jdbcType=VARCHAR},
+			</if>
+			<if test="fileInt != null">
+				FILE_INT = #{fileInt,jdbcType=DECIMAL},
+			</if>
+			<if test="fileFiles != null">
+				FILE_FILES = #{fileFiles,jdbcType=VARCHAR},
+			</if>
+			<if test="fileUrl != null">
+				FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where FILE_ID = #{fileId,jdbcType=DECIMAL}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.soft863.model.File">
+		update BBS_FILE
+		set FILE_NAME = #{fileName,jdbcType=VARCHAR},
+		FILE_TIME = #{fileTime,jdbcType=TIMESTAMP},
+		FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+		FILE_CRUCIAL = #{fileCrucial,jdbcType=VARCHAR},
+		FILE_INTEGRAL = #{fileIntegral,jdbcType=DECIMAL},
+		FILE_DETAILED = #{fileDetailed,jdbcType=VARCHAR},
+		USER_ID = #{userId,jdbcType=DECIMAL},
+		FILE_STRING = #{fileString,jdbcType=VARCHAR},
+		FILE_INT = #{fileInt,jdbcType=DECIMAL},
+		FILE_FILES = #{fileFiles,jdbcType=VARCHAR},
+		FILE_URL = #{fileUrl,jdbcType=VARCHAR}
+		where FILE_ID = #{fileId,jdbcType=DECIMAL}
+	</update>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.FilecommentMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Filecomment">
+    <id column="FC_ID" jdbcType="DECIMAL" property="fcId" />
+    <result column="FC_TIME" jdbcType="TIMESTAMP" property="fcTime" />
+    <result column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+    <result column="FC_CONTENT" jdbcType="VARCHAR" property="fcContent" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="FC_FRACTION" jdbcType="DECIMAL" property="fcFraction" />
+    <result column="FC_STRING" jdbcType="VARCHAR" property="fcString" />
+    <result column="FC_INT" jdbcType="DECIMAL" property="fcInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    FC_ID, FC_TIME, FILE_ID, FC_CONTENT, USER_ID, FC_FRACTION, FC_STRING, FC_INT
+  </sql>
+  
+  <select id="selectByFileId" parameterType="Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_FILECOMMENT
+    where FILE_ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_FILECOMMENT
+    where FC_ID = #{fcId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_FILECOMMENT
+    where FC_ID = #{fcId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Filecomment">
+    insert into BBS_FILECOMMENT (FC_ID, FC_TIME, FILE_ID, 
+      FC_CONTENT, USER_ID, FC_FRACTION, 
+      FC_STRING, FC_INT)
+    values (#{fcId,jdbcType=DECIMAL}, #{fcTime,jdbcType=TIMESTAMP}, #{fileId,jdbcType=DECIMAL}, 
+      #{fcContent,jdbcType=VARCHAR}, #{userId,jdbcType=DECIMAL}, #{fcFraction,jdbcType=DECIMAL}, 
+      #{fcString,jdbcType=VARCHAR}, #{fcInt,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Filecomment">
+    insert into BBS_FILECOMMENT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fcId != null">
+        FC_ID,
+      </if>
+      <if test="fcTime != null">
+        FC_TIME,
+      </if>
+      <if test="fileId != null">
+        FILE_ID,
+      </if>
+      <if test="fcContent != null">
+        FC_CONTENT,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="fcFraction != null">
+        FC_FRACTION,
+      </if>
+      <if test="fcString != null">
+        FC_STRING,
+      </if>
+      <if test="fcInt != null">
+        FC_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fcId != null">
+        #{fcId,jdbcType=DECIMAL},
+      </if>
+      <if test="fcTime != null">
+        #{fcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="fcContent != null">
+        #{fcContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="fcFraction != null">
+        #{fcFraction,jdbcType=DECIMAL},
+      </if>
+      <if test="fcString != null">
+        #{fcString,jdbcType=VARCHAR},
+      </if>
+      <if test="fcInt != null">
+        #{fcInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Filecomment">
+    update BBS_FILECOMMENT
+    <set>
+      <if test="fcTime != null">
+        FC_TIME = #{fcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileId != null">
+        FILE_ID = #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="fcContent != null">
+        FC_CONTENT = #{fcContent,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="fcFraction != null">
+        FC_FRACTION = #{fcFraction,jdbcType=DECIMAL},
+      </if>
+      <if test="fcString != null">
+        FC_STRING = #{fcString,jdbcType=VARCHAR},
+      </if>
+      <if test="fcInt != null">
+        FC_INT = #{fcInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where FC_ID = #{fcId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Filecomment">
+    update BBS_FILECOMMENT
+    set FC_TIME = #{fcTime,jdbcType=TIMESTAMP},
+      FILE_ID = #{fileId,jdbcType=DECIMAL},
+      FC_CONTENT = #{fcContent,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      FC_FRACTION = #{fcFraction,jdbcType=DECIMAL},
+      FC_STRING = #{fcString,jdbcType=VARCHAR},
+      FC_INT = #{fcInt,jdbcType=DECIMAL}
+    where FC_ID = #{fcId,jdbcType=DECIMAL}
+  </update>
+</mapper>

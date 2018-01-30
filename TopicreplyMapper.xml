@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.TopicreplyMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Topicreply">
+    <id column="TC_ID" jdbcType="DECIMAL" property="tcId" />
+    <result column="TOPIC_ID" jdbcType="DECIMAL" property="topicId" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="TC_CONTENT" jdbcType="VARCHAR" property="tcContent" />
+    <result column="TC_TIME" jdbcType="TIMESTAMP" property="tcTime" />
+    <result column="TC_STRING" jdbcType="VARCHAR" property="tcString" />
+    <result column="TC_INT" jdbcType="DECIMAL" property="tcInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TC_ID, TOPIC_ID, USER_ID, TC_CONTENT, TC_TIME, TC_STRING, TC_INT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_TOPICREPLY
+    where TC_ID = #{tcId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_TOPICREPLY
+    where TC_ID = #{tcId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Topicreply">
+    insert into BBS_TOPICREPLY (TC_ID, TOPIC_ID, USER_ID, 
+      TC_CONTENT, TC_TIME, TC_STRING, 
+      TC_INT)
+    values (#{tcId,jdbcType=DECIMAL}, #{topicId,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, 
+      #{tcContent,jdbcType=VARCHAR}, #{tcTime,jdbcType=TIMESTAMP}, #{tcString,jdbcType=VARCHAR}, 
+      #{tcInt,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Topicreply">
+    insert into BBS_TOPICREPLY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tcId != null">
+        TC_ID,
+      </if>
+      <if test="topicId != null">
+        TOPIC_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="tcContent != null">
+        TC_CONTENT,
+      </if>
+      <if test="tcTime != null">
+        TC_TIME,
+      </if>
+      <if test="tcString != null">
+        TC_STRING,
+      </if>
+      <if test="tcInt != null">
+        TC_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tcId != null">
+        #{tcId,jdbcType=DECIMAL},
+      </if>
+      <if test="topicId != null">
+        #{topicId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="tcContent != null">
+        #{tcContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tcTime != null">
+        #{tcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tcString != null">
+        #{tcString,jdbcType=VARCHAR},
+      </if>
+      <if test="tcInt != null">
+        #{tcInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Topicreply">
+    update BBS_TOPICREPLY
+    <set>
+      <if test="topicId != null">
+        TOPIC_ID = #{topicId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="tcContent != null">
+        TC_CONTENT = #{tcContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tcTime != null">
+        TC_TIME = #{tcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tcString != null">
+        TC_STRING = #{tcString,jdbcType=VARCHAR},
+      </if>
+      <if test="tcInt != null">
+        TC_INT = #{tcInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where TC_ID = #{tcId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Topicreply">
+    update BBS_TOPICREPLY
+    set TOPIC_ID = #{topicId,jdbcType=DECIMAL},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      TC_CONTENT = #{tcContent,jdbcType=VARCHAR},
+      TC_TIME = #{tcTime,jdbcType=TIMESTAMP},
+      TC_STRING = #{tcString,jdbcType=VARCHAR},
+      TC_INT = #{tcInt,jdbcType=DECIMAL}
+    where TC_ID = #{tcId,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.DownloadMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Download">
+    <id column="DL_ID" jdbcType="DECIMAL" property="dlId" />
+    <result column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="DL_STRING" jdbcType="VARCHAR" property="dlString" />
+    <result column="DL_INT" jdbcType="DECIMAL" property="dlInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    DL_ID, FILE_ID, USER_ID, DL_STRING, DL_INT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_DOWNLOAD
+    where DL_ID = #{dlId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_DOWNLOAD
+    where DL_ID = #{dlId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Download">
+    insert into BBS_DOWNLOAD (DL_ID, FILE_ID, USER_ID, 
+      DL_STRING, DL_INT)
+    values (#{dlId,jdbcType=DECIMAL}, #{fileId,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, 
+      #{dlString,jdbcType=VARCHAR}, #{dlInt,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Download">
+    insert into BBS_DOWNLOAD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dlId != null">
+        DL_ID,
+      </if>
+      <if test="fileId != null">
+        FILE_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="dlString != null">
+        DL_STRING,
+      </if>
+      <if test="dlInt != null">
+        DL_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dlId != null">
+        #{dlId,jdbcType=DECIMAL},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="dlString != null">
+        #{dlString,jdbcType=VARCHAR},
+      </if>
+      <if test="dlInt != null">
+        #{dlInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Download">
+    update BBS_DOWNLOAD
+    <set>
+      <if test="fileId != null">
+        FILE_ID = #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="dlString != null">
+        DL_STRING = #{dlString,jdbcType=VARCHAR},
+      </if>
+      <if test="dlInt != null">
+        DL_INT = #{dlInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where DL_ID = #{dlId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Download">
+    update BBS_DOWNLOAD
+    set FILE_ID = #{fileId,jdbcType=DECIMAL},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      DL_STRING = #{dlString,jdbcType=VARCHAR},
+      DL_INT = #{dlInt,jdbcType=DECIMAL}
+    where DL_ID = #{dlId,jdbcType=DECIMAL}
+  </update>
+</mapper>

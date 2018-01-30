@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft863.dao.KeepMapper">
+  <resultMap id="BaseResultMap" type="com.soft863.model.Keep">
+    <id column="KEEP_ID" jdbcType="DECIMAL" property="keepId" />
+    <result column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="KEEP_TIME" jdbcType="TIMESTAMP" property="keepTime" />
+    <result column="KEEP_STRING" jdbcType="VARCHAR" property="keepString" />
+    <result column="KEEP_INT" jdbcType="DECIMAL" property="keepInt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    KEEP_ID, FILE_ID, USER_ID, KEEP_TIME, KEEP_STRING, KEEP_INT
+  </sql>
+  
+  <insert id="insertFileKeep" parameterType="keep">
+		INSERT INTO BBS_FILE(KEEP_ID,FILE_ID,USER_ID,KEEP_TIME) 
+		values(SEQ_BBS_KEEP.NEXTVAL,#{keep.fileId},#{keep.userId},#{keep.keepTime})
+	</insert>
+  
+  <select id="selKeepByOther" resultType="int">
+  		SELECT COUNT(KEEP_ID) FROM BBS_KEEP 
+  		WHERE FILE_ID=#{0} AND USER_ID=#{1}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BBS_KEEP
+    where KEEP_ID = #{keepId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from BBS_KEEP
+    where KEEP_ID = #{keepId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.soft863.model.Keep">
+    insert into BBS_KEEP (KEEP_ID, FILE_ID, USER_ID, 
+      KEEP_TIME, KEEP_STRING, KEEP_INT
+      )
+    values (#{keepId,jdbcType=DECIMAL}, #{fileId,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, 
+      #{keepTime,jdbcType=TIMESTAMP}, #{keepString,jdbcType=VARCHAR}, #{keepInt,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.soft863.model.Keep">
+    insert into BBS_KEEP
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="keepId != null">
+        KEEP_ID,
+      </if>
+      <if test="fileId != null">
+        FILE_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="keepTime != null">
+        KEEP_TIME,
+      </if>
+      <if test="keepString != null">
+        KEEP_STRING,
+      </if>
+      <if test="keepInt != null">
+        KEEP_INT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="keepId != null">
+        #{keepId,jdbcType=DECIMAL},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="keepTime != null">
+        #{keepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="keepString != null">
+        #{keepString,jdbcType=VARCHAR},
+      </if>
+      <if test="keepInt != null">
+        #{keepInt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soft863.model.Keep">
+    update BBS_KEEP
+    <set>
+      <if test="fileId != null">
+        FILE_ID = #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="keepTime != null">
+        KEEP_TIME = #{keepTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="keepString != null">
+        KEEP_STRING = #{keepString,jdbcType=VARCHAR},
+      </if>
+      <if test="keepInt != null">
+        KEEP_INT = #{keepInt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where KEEP_ID = #{keepId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soft863.model.Keep">
+    update BBS_KEEP
+    set FILE_ID = #{fileId,jdbcType=DECIMAL},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      KEEP_TIME = #{keepTime,jdbcType=TIMESTAMP},
+      KEEP_STRING = #{keepString,jdbcType=VARCHAR},
+      KEEP_INT = #{keepInt,jdbcType=DECIMAL}
+    where KEEP_ID = #{keepId,jdbcType=DECIMAL}
+  </update>
+</mapper>
